@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Authors
+{% endblock %}
+
+{% block head %}
+<div class="jumbotron jumbotron-fluid text-center">
+    <div class="container">
+        <h1 class="display-4">Authors.</h1>
+        <p class="lead">Number of authors: {{ authors|length }}</p>
+    </div>
+</div>
+{% endblock %}
+{% block main %}
+<div class="table-responsive">
+    <table class="table table-dark table-striped table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Author</th>
+                <th scope="col">No. of books</th>
+
+            </tr>
+        </thead>
+        <tbody>
+        {% for author in authors %}
+            <tr>
+                <td><a href="/authors/{{ author['author'] | replace(' ', '_') }}">{{ author["author"] }}</a></td>
+                <td><a href="/authors/{{ author['author'] | replace(' ', '_') }}">{{ author["count"] }}</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<script>
+    $(document).ready( function () {
+    $('table').DataTable();
+});
+</script>
+{% endblock %}

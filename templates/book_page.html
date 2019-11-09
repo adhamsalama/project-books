@@ -1,0 +1,119 @@
+{% extends "layout.html" %}
+
+{% block title %}
+{{ book["title"] }}
+{% endblock %}
+
+{% block head %}
+<div class="jumbotron jumbotron-fluid text-center">
+    <div class="container">
+        <h1 class="display-4"><a href="https://www.goodreads.com/search?utf8=%E2%9C%93&query={{ book['title'] | replace(' ', '+')}}"
+                target="_blank">{{ book["title"] }}</a>.</h1>
+        <h5 class="lead">Written by <a href="/authors/{{ book['author'] | replace(' ', '_') }}">{{ book["author"] }}</a>.
+            <br>
+            Year: {{ book["year"] }}
+            <br>
+            <br>
+            Goodreads Rating: <span class= "" id="gr_rating">{{ book["average_rating"] }}</span>
+            <br>
+            Number of ratings: {{ book["ratings_count"] }}
+            <br>
+            ISBN: {{ book["isbn"] }}
+        </h5>
+    </div>
+</div>
+{% endblock %}
+{% block main %}
+<img src="http://covers.openlibrary.org/b/isbn/{{ book['isbn'] }}-L.jpg" class="mb-4 coverpic" style="margin-top: -10%;">
+{% if not reviews %}
+<div class="alert alert-danger" role="alert">
+    No reviews found.
+    <p>You can be the first to review this book.</p>
+</div>
+{% else %}
+
+<div class="alert alert-secondary" role="alert">
+        {% for user_review in reviews %}
+<h4>
+    {{ user_review["username"] }}
+    {% if user_review["username"] == session["username"] %}
+    (You)
+    {% endif %}
+    rated it:
+    <span class="rating">{{ user_review["rating"] }}</span>
+</h4>
+    <h5>on {{ user_review["time"] }}</h5>
+
+    <br>
+    <div class="review" role="alert">
+            "{{ user_review["review"] }}"
+    </div>
+    <hr>
+{% endfor %}
+      </div>
+
+{% endif %}
+{% if user_reviewed_before %}
+<div class="alert alert-primary mt-5" role="alert">
+    You already reviewed this book.
+</div>
+{% else %}
+<form class="needs-validation" novalidate action="/review" method="post">
+    <input class="form-control" name="book_id" type="hidden" value="{{ book['id'] }}" required>
+    <div class="form-group mb-2">
+        <input type="number" min="0" step="0.01" max="5" autofocus class="form-control" placeholder="Rating" name="rating" required>
+        <div class="invalid-feedback">Please enter a rating</div>
+    </div>
+    <div class="mb-3">
+        <textarea class="form-control med-form" placeholder="Please write your review" name="review" required></textarea>
+        <div class="invalid-feedback">Review</div>
+    </div>
+    <button class="btn btn-primary" type="submit">Submit</button>
+</form>
+
+{% endif %}
+
+<script>
+
+    let x = document.querySelector("#gr_rating");
+    let f = parseFloat(x.innerHTML);
+    if(f <= 2){
+        x.className = "badge badge-pill badge-danger";
+    }
+    else if(f > 2 && f <= 3){
+        x.className = "badge badge-pill badge-warning";
+    }
+    else if(f > 3 && f <= 4){
+        x.className = "badge badge-pill badge-primary";
+    }
+    else{
+        x.className = "badge badge-pill badge-success";
+    }
+
+    let y = document.getElementsByClassName("rating");
+    let z = document.getElementsByClassName("review");
+    n = y.length;
+    for(let i = 0; i < n; i++){
+        let f = parseFloat(y[i].innerHTML);
+
+        if(f <= 2){
+            y[i].className += " badge badge-pill badge-danger";
+            z[i].className += " alert alert-danger";        
+            }
+        else if(f > 2 && f <= 3){
+            y[i].className += " badge badge-pill badge-warning";    
+            z[i].className += " alert alert-warning";     
+            }
+        else if(f > 3 && f <= 4){
+            y[i].className += " badge badge-pill badge-primary";  
+            z[i].className += " alert alert-primary";       
+            }
+        else{
+            y[i].className += " badge badge-pill badge-success";  
+            z[i].className += " alert alert-success";       
+            }
+    }
+
+
+</script>
+{% endblock %}
