@@ -233,21 +233,6 @@ def feedback():
 def check():
     """Check if username or email is taken"""
 
-    email = request.args.get("email")
-    username = request.args.get("username")
-    # if not username and email:
-    #     return apology(message="please enter the form")
-    # if method.request == "POST":
-    #     new_email = request.form.get("new_email")
-    #     if not email or new_email:
-    #         return apology(message="please enter the form")
-    #     q = db.execute("SELECT email FROM users WHERE id = :id". {"id": session["user_id"]}).fetchone()[0]
-    #     n = db.execute("SELECT email FROM users WHERE email = :new_email". {"new_email": new_email}).fetchall():
-    #     if q != email:
-    #         return jsonify("Wrong email")
-    #     if n:
-    #         return jsonify("Email already taken")
-
     username = request.args.get("username")
     email = request.args.get("email")
     verify_username = db.execute("SELECT username FROM users WHERE username = :username", {"username": username}).fetchone()
@@ -262,9 +247,6 @@ def check():
     if verify_username:
         return jsonify("Username already taken.")
     return jsonify(True)
-
-
-
 
 
 @app.route("/login", methods=["GET", "POST"])
