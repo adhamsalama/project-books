@@ -2,11 +2,13 @@
 
 {% block title %}
 
-Report
+Feedback
 
 {% endblock %}
 
 {% block main %}
+
+{% if session["email"] %}
 
 <form class="needs-validation" novalidate action="/feedback" autocomplete="off" method="post">
     <div class="form-group">
@@ -23,6 +25,15 @@ Report
     </div>
     <button class="btn btn-secondary" type="submit">Send Feedback</button>
 </form>
+{% else %}
+    <div class="alert alert-danger" role="alert">
+            <h4 class="alert-heading">Sorry!</h4>
+            <p>You must add an email to submit feedback.
+            <br>
+            Click on settings then add email add try again.
+            </p>
+    </div>
+{% endif %}
 
 
 

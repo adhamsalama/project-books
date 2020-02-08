@@ -1,5 +1,5 @@
 let username = document.querySelector('#username');
-let email = document.querySelector("#email");
+let email = document.querySelector("#email")
 let password = document.querySelector("#password");
 let confirmation = document.querySelector("#confirmation");
 let form = document.querySelector('form');

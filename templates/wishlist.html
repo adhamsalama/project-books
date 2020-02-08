@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Wishlist
+{% endblock %}
+
+{% block head %}
+<div class="jumbotron jumbotron-fluid text-center">
+    <div class="container">
+        <h1 class="display-4">Wishlist.</h1>
+        <p class="lead">
+            {% if books|length == 1 %}
+                {{ books|length }} book.
+            {% else %}
+            {{ books|length }} books.
+            {% endif %}
+        </p>
+    </div>
+</div>
+{% endblock %}
+{% block main %}
+{% if books %}
+<div class="table-responsive">
+    <table class="table table-dark table-striped table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Cover</th>
+                <th scope="col">Title</th>
+                <th scope="col">Time</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for book in books %}
+            <tr>
+                <td><a href="/books/{{ book['title'] | replace(' ', '_') }}"><img src="http://covers.openlibrary.org/b/isbn/{{ book['isbn'] }}-S.jpg"></a></td>
+                <td><a href="/books/{{ book['title'] | replace(' ', '_') }}">{{ book["title"] }}</a></td>
+                <td><a href="/books/{{ book['title'] | replace(' ', '_') }}">{{ book["time"] }}</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+    <div class="alert alert-danger" role="alert">
+            <h4 class="alert-heading">Sorry!</h4>
+            <p>You haven't wishlisted any books yet.</p>
+    </div>
+{% endif %}
+<script>
+    $(document).ready( function () {
+    $('table').DataTable();
+} );
+</script>
+
+{% endblock %}

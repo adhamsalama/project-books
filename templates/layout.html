@@ -44,8 +44,16 @@
             {% if session.user_id %}
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active"><a class="nav-link" href="/">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="/authors">Authors</a></li>
-                <li class="nav-item"><a class="nav-link" href="/profile"><strong>{{ session["username"]  }}</strong></a></li>
+                                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      User
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <a class="dropdown-item" href="/profile">Profile</a>
+                      <a class="dropdown-item" href="/reviews">Reviews</a>
+                      <a class="dropdown-item" href="/wishlist">Wishlist</a>
+                    </div>
+                  </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       Settings
@@ -58,9 +66,10 @@
                       {% endif %}
                       <a class="dropdown-item" href="/settings/change_password">Change Password</a>
                       <div class="dropdown-divider"></div>
-                      <a class="dropdown-item" href="/feedback">Feedback</a>
+                      <a class="dropdown-item" href="/feedback">Send Feedback</a>
                     </div>
-                  </li>                <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
+                  </li>
+                  <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
             </ul>
             <form class="form-inline my-2 my-lg-0" action="/search" method="get">
                 <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="q"
@@ -91,7 +100,9 @@
         Data provided for free by <a href="https://www.goodreads.com/"
             style="text-decoration: underline; color: blue">Goodreads</a>.
             <br>
+            <div id="feedback">
             Having any problems? <a href="/feedback" style="text-decoration: underline; color: blue">Tell us what's wrong</a>.
+            </div>
     </footer>
     {% endif %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
@@ -107,6 +118,16 @@
 
         const darkmode = new Darkmode(options);
         darkmode.showWidget();
+        let tds = document.querySelectorAll("td");
+        for (let i = 0; i < tds.length; i++)
+        {
+            tds[i].style.verticalAlign = "middle";
+        }
+        if (document.title == "Feedback") {
+            let f = document.querySelector("#feedback");
+            f.parentNode.removeChild(f);
+        }
+
     </script>
 
 </html>

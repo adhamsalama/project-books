@@ -1,0 +1,89 @@
+{% extends "layout.html" %}
+
+{% block title %}
+{{ session["username"] }}
+{% endblock %}
+
+{% block head %}
+<div class="jumbotron jumbotron-fluid text-center">
+    <div class="container">
+        <h1 class="display-4">{{ session["username"] }}.</h1>
+        <p class="lead">Email:
+            {{ email }}
+            <br>
+            Account created on: {{ time }}
+            <br>
+            {% if reviews|length  == 1 %}
+            <a href="/reviews">{{ reviews|length }} book review.</a>
+            {% else %}
+            <a href="/reviews">{{ reviews|length }} books reviews.</a>
+            {% endif %}
+            <br>
+            {% if wishlist_count  == 1 %}
+            <a href="/wishlist">{{ wishlist_count }} book wishlisted.</a>
+            {% else %}
+            <a href="/wishlist">{{ wishlist_count }} books wishlisted.</a>
+            {% endif %}
+        </p>
+    </div>
+</div>
+{% endblock %}
+{% block main %}
+{% if reviews %}
+<!--
+<div class="table-responsive">
+    <table class="table table-dark table-striped table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Cover</th>
+                <th scope="col">Title</th>
+                <th scope="col">Rating</th>
+                <th scope="col">Time</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for review in reviews %}
+
+            <tr>
+                <td><a href="/books/{{ review['title'] | replace(' ', '_') }}"><img src="http://covers.openlibrary.org/b/isbn/{{ review['isbn'] }}-S.jpg"></a></td>
+                <td><a href="/books/{{ review['title'] | replace(' ', '_') }}">{{ review["title"] }}</a></td>
+                <td><a href="/books/{{ review['title'] | replace(' ', '_') }}"><span class="rating">{{ review["rating"] }}</span></a></td>
+                <td><a href="/books/{{ review['title'] | replace(' ', '_') }}">{{ review["time"] }}</a></td>
+            </tr>
+
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+-->
+{% else %}
+    <div class="alert alert-danger" role="alert">
+            <h4 class="alert-heading">Sorry!</h4>
+            <p>You haven't submitted any reviews yet.</p>
+    </div>
+{% endif %}
+<script>
+    $(document).ready( function () {
+    $('table').DataTable();
+} );
+
+    let x = document.getElementsByClassName("rating");
+    n = x.length;
+    for(let i = 0; i < n; i++){
+        let f = parseFloat(x[i].innerHTML);
+
+        if(f <= 2){
+            x[i].className += " badge badge-pill badge-danger";
+            }
+        else if(f > 2 && f <= 3){
+            x[i].className += " badge badge-pill badge-warning";
+            }
+        else if(f > 3 && f <= 4){
+            x[i].className += " badge badge-pill badge-primary";
+            }
+        else{
+            x[i].className += " badge badge-pill badge-success";
+            }
+    }
+</script>
+{% endblock %}

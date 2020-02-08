@@ -2,6 +2,7 @@ import os
 import requests
 import urllib.parse
 import smtplib
+
 from datetime import date
 from flask import redirect, render_template, request, session
 from functools import wraps
@@ -42,7 +43,7 @@ def lookup(isbn):
     # Contact API
     try:
         #api_key = os.environ.get("API_KEY")
-        response = requests.get("https://www.goodreads.com/book/review_counts.json", params={"key": "yourgoodreadsapikeyhere", "isbns": isbn})
+        response = requests.get("https://www.goodreads.com/book/review_counts.json", params={"key": "WHj59OKYTc5wetwygm5g", "isbns": isbn})
         response.raise_for_status()
     except requests.RequestException:
         return None
@@ -61,11 +62,9 @@ def lookup(isbn):
 def send_email(email, name, message):
     server = smtplib.SMTP("smtp.gmail.com", 587)
     server.starttls()
-    server.login("youremailhere", "yourpasswordhere")
-    server.sendmail("youremailhere", email, f"To: {email}\nSubject: Registeration for AAA Books\nHello {name},\n {message}")
+    server.login("aaa.books1@gmail.com", "adhamsalama123")
+    server.sendmail("aaa.books1@gmail.com", email, f"To: {email}\nSubject: Registeration for AAA Books\nHello {name},\n {message}")
 
 def get_time():
     """Get time"""
     return str(date.today())
-
-# thanks for the kind redditor for telling me to remove my credentials

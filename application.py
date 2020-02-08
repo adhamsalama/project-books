@@ -3,16 +3,18 @@ from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
+
+from helpers import apology, login_required, lookup, get_time, send_email
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
-from helpers import apology, login_required, lookup, get_time, send_email
 
 
 app = Flask(__name__)
 
 # Check for environment variable
-if not os.getenv("DATABASE_URL"):
-    raise RuntimeError("DATABASE_URL is not set")
+#if not os.getenv("DATABASE_URL"):
+    #raise RuntimeError("DATABASE_URL is not set")
 
 # Ensure responses aren't cached
 @app.after_request
@@ -28,7 +30,8 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 # Set up database
-engine = create_engine(os.getenv("DATABASE_URL"))
+#engine = create_engine(os.getenv("DATABASE_URL"))
+engine = create_engine("postgres://yklstuutlfzkvb:bba6bde8ae65cabe029637f95fb9d01103abf043f3a7a288af21a14e1e5b6d06@ec2-54-227-251-33.compute-1.amazonaws.com:5432/d2o53jfmd9j0n3")
 db = scoped_session(sessionmaker(bind=engine))
 
 
@@ -231,6 +234,21 @@ def feedback():
 def check():
     """Check if username or email is taken"""
 
+    email = request.args.get("email")
+    username = request.args.get("username")
+    # if not username and email:
+    #     return apology(message="please enter the form")
+    # if method.request == "POST":
+    #     new_email = request.form.get("new_email")
+    #     if not email or new_email:
+    #         return apology(message="please enter the form")
+    #     q = db.execute("SELECT email FROM users WHERE id = :id". {"id": session["user_id"]}).fetchone()[0]
+    #     n = db.execute("SELECT email FROM users WHERE email = :new_email". {"new_email": new_email}).fetchall():
+    #     if q != email:
+    #         return jsonify("Wrong email")
+    #     if n:
+    #         return jsonify("Email already taken")
+
     username = request.args.get("username")
     email = request.args.get("email")
     verify_username = db.execute("SELECT username FROM users WHERE username = :username", {"username": username}).fetchone()
@@ -245,6 +263,9 @@ def check():
     if verify_username:
         return jsonify("Username already taken.")
     return jsonify(True)
+
+
+
 
 
 @app.route("/login", methods=["GET", "POST"])

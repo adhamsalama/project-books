@@ -54,10 +54,16 @@ footer
     .reg-info {
         padding: -3rem;
     }
-    .coverpic  {
-        height: 100px;
+    .coverpic {
+        height: 350px;
+        width: 100%;
     }
+
 }
+.darkmode-toggle {
+  z-index: 500;
+}
+
 
 
 @media (min-width: 600px) {
@@ -87,4 +93,9 @@ a:hover, a:visited, a:link, a:active
 
 td a {
     display: block;
+}
+.index {
+   background-image: url('/static/books.jpg');
+   display: block;
+     background-size: 100% 100%;
 }
